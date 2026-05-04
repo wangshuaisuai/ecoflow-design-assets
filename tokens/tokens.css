@@ -1,0 +1,65 @@
+:root {
+  /* 1-colorboard */
+  --0: 0px;
+  --2: 2px;
+  --4: 4px;
+  --8: 8px;
+  --12: 12px;
+  --16: 16px;
+  --24: 24px;
+  --32: 32px;
+  --40: 40px;
+  --56: 56px;
+  --64: 64px;
+  --72: 72px;
+  --white-100%: #ffffff;
+  --white-60%: rgba(255, 255, 255, 0.60);
+  --white-35%: rgba(255, 255, 255, 0.35);
+  --white-16%: rgba(255, 255, 255, 0.16);
+  --white-8%: rgba(255, 255, 255, 0.08);
+  --blue-100%: #396fe5;
+  --green: #00d15c;
+  --orange: #ffa400;
+  --red: #ff3d00;
+  --grey-1: #f3f3f3;
+  --grey-2: #e5e5e6;
+  --grey-3: #c9c9c9;
+  --grey-4: #a7a7a8;
+  --grey-5: #7d7d7e;
+  --grey-6: #39393d;
+  --grey-7: #333337;
+  --grey-8: #2c2c2f;
+  --grey-9: #242427;
+  --grey-10: #19191b;
+  --grey-11: #010101;
+  --grey-12: rgba(0, 0, 0, 0.60);
+  /* 2_color_text */
+  --color_text_primary: var(--white-100%);
+  --color_text_secondary: var(--white-60%);
+  --color_text_disable: var(--white-35%);
+  --color-text-charge: var(--green);
+  --color-text-discharge: var(--orange);
+  --color_text_error: var(--red);
+  /* 2_spacing */
+  --spacing_0: [object Object]px;
+  --spacing_2: [object Object]px;
+  --spacing_4: [object Object]px;
+  --spacing_3: [object Object]px;
+  --spacing_12: [object Object]px;
+  --spacing_16: [object Object]px;
+  --spacing_24: [object Object]px;
+  --spacing_32: [object Object]px;
+  --spacing_40: [object Object]px;
+  --spacing_56: [object Object]px;
+  --spacing_64: [object Object]px;
+  --spacing_72: [object Object]px;
+  /* 2_color_fill */
+  --color_fill_bg: var(--grey-11);
+  --color_fill_primary: var(--grey-9);
+  --color_fill_secondary: var(--grey-8);
+  --color_fill_thridary: var(--grey-6);
+  --color_fill_mask: var(--grey-12);
+  /* 2_color_border */
+  --color_border_primary: var(--white-8%);
+  --color_border_brand: var(--blue-100%);
+}

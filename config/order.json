@@ -1,1 +1,9 @@
-{"svg":[],"png":[]}
+{
+  "svg": [
+    "icon-arrow-left.svg",
+    "icon-battery-charging.svg"
+  ],
+  "png": [
+    "icon-ai-mode@2x.png"
+  ]
+}

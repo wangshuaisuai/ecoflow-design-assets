@@ -10,10 +10,10 @@
 :root {
   --bg: #0f0f13;
   --surface: #1a1a22;
-  --surface-hover: #252530;
+  --surface-hover: #1f1f2a;
   --border: #2a2a35;
   --text: #e4e4e8;
-  --text-muted: #8b8b96;
+  --text-muted: rgba(255,255,255,0.35);
   --accent: #578cff;
   --success: #00d15c;
 }
@@ -35,6 +35,14 @@ body {
   display: flex;
   align-items: center;
   gap: 24px;
+  justify-content: center;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1080px;
 }
 .header-title {
   font-size: 18px;
@@ -44,17 +52,17 @@ body {
 .header-title span { color: var(--accent); }
 .search-box {
   flex: 1;
-  max-width: 400px;
+  max-width: 360px;
   position: relative;
 }
 .search-box input {
   width: 100%;
-  padding: 10px 16px 10px 40px;
+  padding: 9px 16px 9px 36px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  font-size: 14px;
+  font-size: 13px;
   outline: none;
   transition: border-color 0.2s;
 }
@@ -62,25 +70,29 @@ body {
 .search-box::before {
   content: "\1F50D";
   position: absolute;
-  left: 14px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 14px;
-  opacity: 0.5;
+  font-size: 12px;
+  opacity: 0.4;
 }
 .stats {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
   white-space: nowrap;
 }
 
 /* Content */
-.content { padding: 32px; }
+.content {
+  padding: 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
 .section { margin-bottom: 40px; }
 .section-title {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.5);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 16px;
@@ -92,74 +104,88 @@ body {
   background: var(--surface);
   padding: 2px 8px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
 }
 
-/* Icon Grid */
+/* Icon Grid - 10 columns */
 .icon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
 }
-.icon-card {
+
+/* Icon Unit (pair: line + fill) */
+.icon-unit {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 16px 8px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.15s;
+  border-radius: 8px;
+  cursor: grab;
+  transition: background 0.15s;
   border: 1px solid transparent;
-  position: relative;
+  padding: 4px;
 }
-.icon-card:hover {
+.icon-unit:hover {
   background: var(--surface-hover);
   border-color: var(--border);
 }
-.icon-card:active { transform: scale(0.95); }
-.icon-card.copied {
+.icon-unit.copied {
   border-color: var(--success);
-  background: rgba(0, 209, 92, 0.08);
+  background: rgba(0, 209, 92, 0.06);
 }
-.icon-card img {
-  width: 32px;
-  height: 32px;
+
+/* Icon cell (single slot: line or fill) */
+.icon-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.1s;
+  position: relative;
+}
+.icon-cell:hover { background: rgba(255,255,255,0.04); }
+.icon-cell img {
+  width: 24px;
+  height: 24px;
   object-fit: contain;
-  margin-bottom: 8px;
 }
-.icon-card .icon-name {
-  font-size: 11px;
+.icon-cell.empty {
+  opacity: 0.15;
+  pointer-events: none;
+}
+.icon-cell .cell-label {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  display: none;
+}
+.icon-unit:hover .cell-label { display: block; }
+
+/* Icon name */
+.icon-unit-name {
+  font-size: 12px;
   color: var(--text-muted);
   text-align: center;
-  word-break: break-all;
+  padding: 4px 2px 6px;
   line-height: 1.3;
-  max-width: 100%;
+  word-break: break-all;
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
 }
-.icon-card .copy-hint {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  font-size: 10px;
-  color: var(--accent);
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.icon-card:hover .copy-hint { opacity: 1; }
 
 /* Drag states */
 .sortable-ghost {
-  opacity: 0.3;
-  background: var(--surface);
+  opacity: 0.2;
   border: 1px dashed var(--accent);
 }
 .sortable-chosen { cursor: grabbing; }
-.icon-card.drag-handle { cursor: grab; }
 
 /* Toast */
 .toast {
@@ -179,11 +205,12 @@ body {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* Loading */
-.loading {
+/* Loading & Empty */
+.loading, .empty {
   text-align: center;
   padding: 60px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.35);
+  font-size: 14px;
 }
 .loading::after {
   content: "";
@@ -198,14 +225,6 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Empty */
-.empty {
-  text-align: center;
-  padding: 40px;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
 /* Save indicator */
 .save-indicator {
   position: fixed;
@@ -216,7 +235,7 @@ body {
   padding: 8px 14px;
   border-radius: 6px;
   font-size: 12px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.5);
   opacity: 0;
   transition: opacity 0.3s;
   z-index: 200;
@@ -224,16 +243,21 @@ body {
 .save-indicator.show { opacity: 1; }
 .save-indicator.success { color: var(--success); border-color: var(--success); }
 .save-indicator.error { color: #ff5555; border-color: #ff5555; }
+
+/* PNG section uses single row (no line/fill pairing) */
+.icon-grid-png .icon-unit .icon-cell { aspect-ratio: 1; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title"><span>EcoFlow</span> Design Assets</div>
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="搜索图标名称...">
+  <div class="header-inner">
+    <div class="header-title"><span>EcoFlow</span> Design Assets</div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索图标名称...">
+    </div>
+    <div class="stats" id="stats">加载中...</div>
   </div>
-  <div class="stats" id="stats">加载中...</div>
 </div>
 
 <div class="content" id="content">
@@ -253,7 +277,7 @@ const CDN_BASE = `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}`;
 function getToken() {
   let token = localStorage.getItem('gh_pat');
   if (!token) {
-    token = prompt('请输入 GitHub Personal Access Token（仅需输入一次，将保存在本地）：');
+    token = prompt('请输入 GitHub Personal Access Token（仅需输入一次）：');
     if (token) localStorage.setItem('gh_pat', token.trim());
   }
   return token;
@@ -262,11 +286,11 @@ function getToken() {
 // ========== STATE ==========
 let svgFiles = [];
 let pngFiles = [];
+let svgPairs = []; // [{base, line, fill}]
 let orderData = { svg: [], png: [] };
 let orderSha = null;
 let saveTimeout = null;
 
-// ========== GITHUB API ==========
 // ========== GITHUB API ==========
 async function ghAPI(path, method, body) {
   const headers = { 'Accept': 'application/vnd.github+json' };
@@ -291,40 +315,47 @@ async function ghAPI(path, method, body) {
   }
 }
 
-async function loadFiles() {
-  try {
-    const [svgData, pngData, orderRes] = await Promise.all([
-      ghAPI('/contents/icons/svg'),
-      ghAPI('/contents/icons/png'),
-      ghAPI('/contents/config/order.json')
-    ]);
-
-    if (!svgData && !pngData) {
-      document.getElementById('content').innerHTML = '<div class="empty">无法加载资产列表。<br><br>如果是首次使用，请点击下方按钮输入 GitHub Token：<br><br><button onclick="localStorage.removeItem(\'gh_pat\');location.reload()" style="padding:8px 16px;border-radius:6px;border:1px solid #578cff;background:transparent;color:#578cff;cursor:pointer">重新输入 Token</button></div>';
-      return;
+// ========== DATA PROCESSING ==========
+function buildSvgPairs(files) {
+  const map = {};
+  for (const f of files) {
+    const name = f.replace(/\.svg$/, '');
+    let base, variant;
+    if (name.endsWith('-line')) {
+      base = name.slice(0, -5);
+      variant = 'line';
+    } else if (name.endsWith('-fill')) {
+      base = name.slice(0, -5);
+      variant = 'fill';
+    } else {
+      base = name;
+      variant = 'line';
     }
-
-    svgFiles = (svgData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
-    pngFiles = (pngData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
-
-  if (orderRes && orderRes.content) {
-    try {
-      orderData = JSON.parse(atob(orderRes.content.replace(/\n/g, '')));
-      orderSha = orderRes.sha;
-    } catch(e) { orderData = { svg: [], png: [] }; }
+    if (!map[base]) map[base] = { base, line: null, fill: null };
+    map[base][variant] = f;
   }
+  return Object.values(map);
+}
 
-  svgFiles = applyOrder(svgFiles, orderData.svg || []);
-  pngFiles = applyOrder(pngFiles, orderData.png || []);
+function getDisplayName(base) {
+  return base.replace(/^icon-/, '');
+}
 
-  render();
-  } catch (e) {
-    document.getElementById('content').innerHTML = `<div class="empty">加载失败: ${e.message}<br><br><button onclick="localStorage.removeItem('gh_pat');location.reload()" style="padding:8px 16px;border-radius:6px;border:1px solid #578cff;background:transparent;color:#578cff;cursor:pointer">重新输入 Token</button></div>`;
+function applyPairOrder(pairs, order) {
+  if (!order || !order.length) return pairs.sort((a, b) => a.base.localeCompare(b.base));
+  const ordered = [];
+  for (const base of order) {
+    const p = pairs.find(x => x.base === base);
+    if (p) ordered.push(p);
   }
+  for (const p of pairs) {
+    if (!ordered.includes(p)) ordered.push(p);
+  }
+  return ordered;
 }
 
 function applyOrder(files, order) {
-  if (!order.length) return files.sort();
+  if (!order || !order.length) return files.sort();
   const ordered = [];
   for (const name of order) {
     if (files.includes(name)) ordered.push(name);
@@ -335,40 +366,74 @@ function applyOrder(files, order) {
   return ordered;
 }
 
+// ========== LOAD ==========
+async function loadFiles() {
+  try {
+    const [svgData, pngData, orderRes] = await Promise.all([
+      ghAPI('/contents/icons/svg'),
+      ghAPI('/contents/icons/png'),
+      ghAPI('/contents/config/order.json')
+    ]);
+
+    if (!svgData && !pngData) {
+      document.getElementById('content').innerHTML = '<div class="empty">无法加载资产列表。<br><br><button onclick="localStorage.removeItem(\'gh_pat\');location.reload()" style="padding:8px 16px;border-radius:6px;border:1px solid #578cff;background:transparent;color:#578cff;cursor:pointer;font-size:13px">重新输入 Token</button></div>';
+      return;
+    }
+
+    svgFiles = (svgData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
+    pngFiles = (pngData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
+
+    if (orderRes && orderRes.content) {
+      try {
+        orderData = JSON.parse(atob(orderRes.content.replace(/\n/g, '')));
+        orderSha = orderRes.sha;
+      } catch(e) { orderData = { svg: [], png: [] }; }
+    }
+
+    svgPairs = buildSvgPairs(svgFiles);
+    svgPairs = applyPairOrder(svgPairs, orderData.svg || []);
+    pngFiles = applyOrder(pngFiles, orderData.png || []);
+
+    render();
+  } catch (e) {
+    document.getElementById('content').innerHTML = `<div class="empty">加载失败: ${e.message}<br><br><button onclick="localStorage.removeItem('gh_pat');location.reload()" style="padding:8px 16px;border-radius:6px;border:1px solid #578cff;background:transparent;color:#578cff;cursor:pointer;font-size:13px">重新输入 Token</button></div>`;
+  }
+}
+
 // ========== RENDER ==========
 function render() {
   const query = document.getElementById('searchInput').value.toLowerCase().trim();
-  const filteredSvg = svgFiles.filter(f => f.toLowerCase().includes(query));
+  const filteredPairs = svgPairs.filter(p => p.base.toLowerCase().includes(query));
   const filteredPng = pngFiles.filter(f => f.toLowerCase().includes(query));
-  const total = svgFiles.length + pngFiles.length;
-  const showing = filteredSvg.length + filteredPng.length;
+  const totalSvg = svgPairs.length;
+  const totalPng = pngFiles.length;
 
   document.getElementById('stats').textContent = query
-    ? `显示 ${showing} / 共 ${total} 个资产`
-    : `共 ${total} 个资产（SVG ${svgFiles.length} · PNG ${pngFiles.length}）`;
+    ? `显示 ${filteredPairs.length + filteredPng.length} 项`
+    : `SVG ${totalSvg} 组 · PNG ${totalPng} 个`;
 
   const content = document.getElementById('content');
   let html = '';
 
-  if (filteredSvg.length > 0) {
+  if (filteredPairs.length > 0) {
     html += `<div class="section">
-      <div class="section-title">SVG 图标 <span class="section-count">${filteredSvg.length}</span></div>
+      <div class="section-title">SVG Icons <span class="section-count">${filteredPairs.length}</span></div>
       <div class="icon-grid" id="grid-svg">
-        ${filteredSvg.map(f => iconCard(f, 'svg')).join('')}
+        ${filteredPairs.map(p => svgUnitCard(p)).join('')}
       </div>
     </div>`;
   }
 
   if (filteredPng.length > 0) {
     html += `<div class="section">
-      <div class="section-title">PNG 切图 <span class="section-count">${filteredPng.length}</span></div>
-      <div class="icon-grid" id="grid-png">
-        ${filteredPng.map(f => iconCard(f, 'png')).join('')}
+      <div class="section-title">PNG Assets <span class="section-count">${filteredPng.length}</span></div>
+      <div class="icon-grid icon-grid-png" id="grid-png">
+        ${filteredPng.map(f => pngCard(f)).join('')}
       </div>
     </div>`;
   }
 
-  if (!filteredSvg.length && !filteredPng.length) {
+  if (!filteredPairs.length && !filteredPng.length) {
     html = '<div class="empty">没有找到匹配的资产</div>';
   }
 
@@ -376,23 +441,43 @@ function render() {
   initSortable();
 }
 
-function iconCard(filename, type) {
-  const src = `${CDN_BASE}/icons/${type}/${filename}`;
-  const displayName = filename.replace(/@[23]x\.png$/, '').replace(/\.svg$/, '').replace(/\.png$/, '');
-  return `<div class="icon-card drag-handle" data-name="${filename}" data-type="${type}" onclick="copyLink(this, '${type}', '${filename}')">
-    <span class="copy-hint">复制</span>
-    <img src="${src}" alt="${displayName}" loading="lazy">
-    <span class="icon-name">${displayName}</span>
+function svgUnitCard(pair) {
+  const lineUrl = pair.line ? `${CDN_BASE}/icons/svg/${pair.line}` : '';
+  const fillUrl = pair.fill ? `${CDN_BASE}/icons/svg/${pair.fill}` : '';
+  const displayName = getDisplayName(pair.base);
+
+  return `<div class="icon-unit" data-base="${pair.base}">
+    <div class="icon-cell ${pair.line ? '' : 'empty'}" onclick="event.stopPropagation();${pair.line ? `copyFile(this.parentElement,'svg','${pair.line}')` : ''}">
+      ${pair.line ? `<img src="${lineUrl}" alt="${displayName}-line" loading="lazy">` : '<span style="font-size:20px;opacity:0.3">—</span>'}
+      <span class="cell-label">line</span>
+    </div>
+    <div class="icon-cell ${pair.fill ? '' : 'empty'}" onclick="event.stopPropagation();${pair.fill ? `copyFile(this.parentElement,'svg','${pair.fill}')` : ''}">
+      ${pair.fill ? `<img src="${fillUrl}" alt="${displayName}-fill" loading="lazy">` : '<span style="font-size:20px;opacity:0.3">—</span>'}
+      <span class="cell-label">fill</span>
+    </div>
+    <div class="icon-unit-name" title="${pair.base}">${displayName}</div>
+  </div>`;
+}
+
+function pngCard(filename) {
+  const src = `${CDN_BASE}/icons/png/${filename}`;
+  const displayName = filename.replace(/^icon-/, '').replace(/@[23]x\.png$/, '').replace(/\.png$/, '');
+  return `<div class="icon-unit" data-name="${filename}" onclick="copyFile(this,'png','${filename}')">
+    <div class="icon-cell">
+      <img src="${src}" alt="${displayName}" loading="lazy">
+    </div>
+    <div class="icon-unit-name" title="${filename}">${displayName}</div>
   </div>`;
 }
 
 // ========== COPY ==========
-function copyLink(el, type, filename) {
+function copyFile(el, type, filename) {
   const url = `${CDN_BASE}/icons/${type}/${filename}`;
   navigator.clipboard.writeText(url).then(() => {
-    el.classList.add('copied');
+    const unit = el.closest('.icon-unit');
+    unit.classList.add('copied');
     showToast(`已复制: ${filename}`);
-    setTimeout(() => el.classList.remove('copied'), 1500);
+    setTimeout(() => unit.classList.remove('copied'), 1500);
   });
 }
 
@@ -412,7 +497,6 @@ function initSortable() {
     new Sortable(svgGrid, {
       animation: 150,
       ghostClass: 'sortable-ghost',
-      chosenClass: 'sortable-chosen',
       onEnd: () => saveOrder()
     });
   }
@@ -420,7 +504,6 @@ function initSortable() {
     new Sortable(pngGrid, {
       animation: 150,
       ghostClass: 'sortable-ghost',
-      chosenClass: 'sortable-chosen',
       onEnd: () => saveOrder()
     });
   }
@@ -431,27 +514,21 @@ function saveOrder() {
   const pngGrid = document.getElementById('grid-png');
 
   if (svgGrid) {
-    svgFiles = [...svgGrid.querySelectorAll('.icon-card')].map(el => el.dataset.name);
-    orderData.svg = svgFiles;
+    orderData.svg = [...svgGrid.querySelectorAll('.icon-unit')].map(el => el.dataset.base);
   }
   if (pngGrid) {
-    pngFiles = [...pngGrid.querySelectorAll('.icon-card')].map(el => el.dataset.name);
-    orderData.png = pngFiles;
+    orderData.png = [...pngGrid.querySelectorAll('.icon-unit')].map(el => el.dataset.name);
   }
 
   clearTimeout(saveTimeout);
   showSaveIndicator('保存中...');
-  saveTimeout = setTimeout(commitOrder, 1000);
+  saveTimeout = setTimeout(commitOrder, 1500);
 }
 
 async function commitOrder() {
   try {
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(orderData, null, 2))));
-    const body = {
-      message: '更新图标排序',
-      content: content,
-      branch: BRANCH
-    };
+    const body = { message: '更新图标排序', content, branch: BRANCH };
     if (orderSha) body.sha = orderSha;
 
     const res = await ghAPI('/contents/config/order.json', 'PUT', body);

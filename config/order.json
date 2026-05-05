@@ -1,7 +1,7 @@
 {
   "svg": [
-    "icon-arrow-left.svg",
-    "icon-battery-charging.svg"
+    "icon-battery-charging",
+    "icon-arrow-left"
   ],
   "png": [
     "icon-ai-mode@2x.png"

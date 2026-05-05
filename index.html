@@ -270,29 +270,42 @@ let saveTimeout = null;
 // ========== GITHUB API ==========
 async function ghAPI(path, method, body) {
   const headers = { 'Accept': 'application/vnd.github+json' };
-  if (method && method !== 'GET') {
-    const token = getToken();
-    if (!token) return null;
-    headers['Authorization'] = `Bearer ${token}`;
+  const token = localStorage.getItem('gh_pat');
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (method && method !== 'GET' && !token) {
+    const newToken = getToken();
+    if (!newToken) return null;
+    headers['Authorization'] = `Bearer ${newToken}`;
   }
-  const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path}`, {
-    method: method || 'GET',
-    headers,
-    body: body ? JSON.stringify(body) : undefined
-  });
-  if (!res.ok && (method || 'GET') === 'GET') return null;
-  return res.json();
+  try {
+    const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path}`, {
+      method: method || 'GET',
+      headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (e) {
+    console.error('API Error:', e);
+    return null;
+  }
 }
 
 async function loadFiles() {
-  const [svgData, pngData, orderRes] = await Promise.all([
-    ghAPI('/contents/icons/svg'),
-    ghAPI('/contents/icons/png'),
-    ghAPI('/contents/config/order.json')
-  ]);
+  try {
+    const [svgData, pngData, orderRes] = await Promise.all([
+      ghAPI('/contents/icons/svg'),
+      ghAPI('/contents/icons/png'),
+      ghAPI('/contents/config/order.json')
+    ]);
 
-  svgFiles = (svgData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
-  pngFiles = (pngData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
+    if (!svgData && !pngData) {
+      document.getElementById('content').innerHTML = '<div class="empty">无法加载资产列表。<br><br>如果是首次使用，请点击下方按钮输入 GitHub Token：<br><br><button onclick="localStorage.removeItem(\'gh_pat\');location.reload()" style="padding:8px 16px;border-radius:6px;border:1px solid #578cff;background:transparent;color:#578cff;cursor:pointer">重新输入 Token</button></div>';
+      return;
+    }
+
+    svgFiles = (svgData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
+    pngFiles = (pngData || []).filter(f => f.name !== '.gitkeep').map(f => f.name);
 
   if (orderRes && orderRes.content) {
     try {
@@ -305,6 +318,9 @@ async function loadFiles() {
   pngFiles = applyOrder(pngFiles, orderData.png || []);
 
   render();
+  } catch (e) {
+    document.getElementById('content').innerHTML = `<div class="empty">加载失败: ${e.message}<br><br><button onclick="localStorage.removeItem('gh_pat');location.reload()" style="padding:8px 16px;border-radius:6px;border:1px solid #578cff;background:transparent;color:#578cff;cursor:pointer">重新输入 Token</button></div>`;
+  }
 }
 
 function applyOrder(files, order) {
@@ -461,6 +477,10 @@ function showSaveIndicator(text, type) {
 document.getElementById('searchInput').addEventListener('input', () => render());
 
 // ========== INIT ==========
+if (!localStorage.getItem('gh_pat')) {
+  const t = prompt('首次使用请输入 GitHub Token（用于读取仓库资产）：');
+  if (t) localStorage.setItem('gh_pat', t.trim());
+}
 loadFiles();
 </script>
 </body>

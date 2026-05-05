@@ -267,18 +267,20 @@ let orderSha = null;
 let saveTimeout = null;
 
 // ========== GITHUB API ==========
+// ========== GITHUB API ==========
 async function ghAPI(path, method, body) {
-  const token = getToken();
-  if (!token) return null;
+  const headers = { 'Accept': 'application/vnd.github+json' };
+  if (method && method !== 'GET') {
+    const token = getToken();
+    if (!token) return null;
+    headers['Authorization'] = `Bearer ${token}`;
+  }
   const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}${path}`, {
     method: method || 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github+json'
-    },
+    headers,
     body: body ? JSON.stringify(body) : undefined
   });
-  if (!res.ok && method === 'GET') return null;
+  if (!res.ok && (method || 'GET') === 'GET') return null;
   return res.json();
 }
 

@@ -372,12 +372,31 @@ function iconCard(filename, type) {
 }
 
 function copyLink(el, type, filename) {
-  const url = `${CDN_BASE}/icons/${type}/${filename}`;
-  navigator.clipboard.writeText(url).then(() => {
-    el.classList.add('copied');
-    showToast(`已复制: ${filename}`);
-    setTimeout(() => el.classList.remove('copied'), 1200);
-  });
+  const name = filename.replace(/\.svg$/, '').replace(/\.png$/, '');
+  const text = name;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showCopied(el, text)).catch(() => fallbackCopy(el, text));
+  } else {
+    fallbackCopy(el, text);
+  }
+}
+
+function fallbackCopy(el, text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showCopied(el, text);
+}
+
+function showCopied(el, text) {
+  el.classList.add('copied');
+  showToast(`✓ 已复制: ${text}`);
+  setTimeout(() => el.classList.remove('copied'), 1200);
 }
 
 function showToast(msg) {

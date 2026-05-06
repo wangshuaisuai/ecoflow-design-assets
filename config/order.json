@@ -5,5 +5,11 @@
   ],
   "png": [
     "icon-ai-mode@2x.png"
+  ],
+  "battery": [
+    "icon-battery-charging.svg"
+  ],
+  "basic": [
+    "icon-arrow-left.svg"
   ]
 }
